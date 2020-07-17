@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QGridLayout, QPushButton, QLabel, QPlainTextEdit, QSizePolicy, QComboBox, QStackedLayout, QDialog, QFileDialog
-from PyQt5.QtGui import QPainter, QBrush, QPen, QFont, QColor, QFontDatabase, QImage, QClipboard
+from PyQt5.QtGui import QPainter, QBrush, QPen, QFont, QColor, QFontDatabase, QImage, QClipboard, QPalette
 from PyQt5.QtCore import Qt, QRect, QPoint
 import sys
 import textwrap
@@ -285,7 +285,7 @@ class Window(QWidget):
             script += "squeak(" + squeaks[self.textbox_squeak].lower() + ")\n"
         script += "text("
         script += GetRealColorName(self.textbox_color).lower() + ","
-        script += str(self.textbox_position_x) + "," + str(self.textbox_position_y) + "," + str(len(text.split("\n"))) + ")\n"
+        script += str(self.textbox_position_x / 2) + "," + str(self.textbox_position_y / 2) + "," + str(len(text.split("\n"))) + ")\n"
         script += text + "\n"
         if self.textbox_color > 6:
             script += "createcrewman(-20,0,gray,0,faceleft)\n"
@@ -322,6 +322,8 @@ class PositionWindow(QWidget):
         self.offset_x = 0
         self.offset_y = 0
         self.mouse_down = False
+        
+        self.background_image = None
 
         QFontDatabase.addApplicationFont(os.path.dirname(__file__) + "/space_station.ttf")
         self.InitWindow()
@@ -332,7 +334,8 @@ class PositionWindow(QWidget):
         self.setWindowTitle(self.title)
 
         self.resize(640,480)
-
+        
+        self.setAcceptDrops(True)
         self.setMouseTracking(True)
         self.setFocus()
         self.setStyleSheet("background-color: black;")
@@ -342,6 +345,12 @@ class PositionWindow(QWidget):
         text_width, text_height = PaintTextbox(painter,self.textbox_x,self.textbox_y,self.textbox_text,colors[self.textbox_color])
         self.textbox_width = text_width + 32
         self.textbox_height = text_height + 32
+
+        
+        if self.background_image:
+            palette = QPalette()
+            palette.setBrush(QPalette.Window, QBrush(self.background_image))                        
+            self.setPalette(palette)
 
         painter.setPen(QColor(0,0,0))
         painter.drawText(8,  10 + 16, "[Press ENTER to return to editor]")
@@ -391,6 +400,18 @@ class PositionWindow(QWidget):
         if e.key() == Qt.Key_Return:
             e.accept()
             self.close()
+            
+    def dragEnterEvent(self, e):
+        if e.mimeData().hasImage() or e.mimeData().hasUrls():
+            e.acceptProposedAction()
+
+    def dropEvent(self, e):
+        if e.mimeData().hasImage():
+            self.background_image = e.mimeData().imageData()
+        elif e.mimeData().hasUrls():
+            self.background_image = QImage(e.mimeData().urls()[0].toLocalFile())
+        e.acceptProposedAction();
+        self.update()
 
 
 def run():
