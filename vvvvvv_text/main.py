@@ -2,11 +2,12 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QGridLayout, QPushButton, QLabel, QPlainTextEdit, QSizePolicy, QComboBox, QStackedLayout, QDialog, QFileDialog
 from PyQt5.QtGui import QPainter, QBrush, QPen, QFont, QColor, QFontDatabase, QImage, QClipboard, QPalette
-from PyQt5.QtCore import Qt, QRect, QPoint
+from PyQt5.QtCore import Qt, QRect, QPoint, QByteArray
 import sys
 import textwrap
 import math
 import os
+import urllib.request
 
 colors = [
     (164,164,255),
@@ -235,7 +236,7 @@ class Window(QWidget):
         if not fname[0]:
             return
 
-        image = QImage(2000, 2000, QImage.Format_RGB32)
+        image = QImage(640, 480, QImage.Format_RGB32)
         painter = QtGui.QPainter(image)
         text_width, text_height = PaintTextbox(painter,0,0,self.textbox_text,colors[self.textbox_color])
         painter.end()
@@ -248,7 +249,7 @@ class Window(QWidget):
         pass
     
     def copy_image(self):
-        image = QImage(2000, 2000, QImage.Format_RGB32)
+        image = QImage(640, 480, QImage.Format_RGB32)
         painter = QtGui.QPainter(image)
         text_width, text_height = PaintTextbox(painter,0,0,self.textbox_text,colors[self.textbox_color])
         painter.end()
@@ -345,7 +346,6 @@ class PositionWindow(QWidget):
         text_width, text_height = PaintTextbox(painter,self.textbox_x,self.textbox_y,self.textbox_text,colors[self.textbox_color])
         self.textbox_width = text_width + 32
         self.textbox_height = text_height + 32
-
         
         if self.background_image:
             palette = QPalette()
@@ -397,9 +397,34 @@ class PositionWindow(QWidget):
         self.mouse_down = False
     
     def keyPressEvent(self, e):
-        if e.key() == Qt.Key_Return:
+        if e.key() == Qt.Key_V and e.modifiers() & Qt.CTRL:
+            clip = QApplication.clipboard()
+            mime = clip.mimeData()
+            if mime.hasImage():
+                self.background_image = mime.imageData()
+            elif mime.hasUrls():
+                if mime.urls()[0].isLocalFile():
+                    self.background_image = QImage(mime.urls()[0].toLocalFile())
+            elif mime.hasText():
+                try:
+                    request = urllib.request.Request(
+                        mime.text(),
+                        headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'}
+                    )
+                    returned = urllib.request.urlopen(request)
+                except:
+                    return
+                if returned.code == 200:
+                    data = returned.read()
+                    self.background_image = QImage()
+                    self.background_image.loadFromData(data)
+                else:
+                    print("Received code " + str(returned.code) + " while trying to fetch " + mime.text())
+
+        elif e.key() == Qt.Key_Return:
             e.accept()
             self.close()
+        self.update()
             
     def dragEnterEvent(self, e):
         if e.mimeData().hasImage() or e.mimeData().hasUrls():
@@ -409,7 +434,24 @@ class PositionWindow(QWidget):
         if e.mimeData().hasImage():
             self.background_image = e.mimeData().imageData()
         elif e.mimeData().hasUrls():
-            self.background_image = QImage(e.mimeData().urls()[0].toLocalFile())
+            if e.mimeData().urls()[0].isLocalFile():
+                self.background_image = QImage(e.mimeData().urls()[0].toLocalFile())
+            else:
+                try:
+                    request = urllib.request.Request(
+                        e.mimeData().urls()[0].toString(),
+                        headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'}
+                    )
+                    returned = urllib.request.urlopen(request)
+                except:
+                    return
+                if returned.code == 200:
+                    data = returned.read()
+                    self.background_image = QImage()
+                    self.background_image.loadFromData(data)
+                else:
+                    print("Received code " + str(returned.code) + " while trying to fetch " + e.mimeData().urls()[0].toString())
+
         e.acceptProposedAction();
         self.update()
 
