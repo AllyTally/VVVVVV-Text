@@ -134,7 +134,7 @@ class Window(QWidget):
         self.InitWindow()
 
     def InitWindow(self):
-        self.setWindowIcon(QtGui.QIcon("icon.png"))
+        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__) + "/icon.png"))
         self.setWindowTitle(self.title)
 
         self.resize(640,480)
@@ -324,7 +324,7 @@ class PositionWindow(QDialog):
         self.InitWindow()
 
     def InitWindow(self):
-        self.setWindowIcon(QtGui.QIcon("icon.png"))
+        self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__) + "/icon.png"))
         self.setWindowTitle(self.title)
 
         self.resize(640,480)
