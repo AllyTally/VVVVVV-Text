@@ -20,6 +20,6 @@ setuptools.setup(
     ],
     include_package_data=True,
     package_data={
-        "vvvvvv_text": ["*.ttf"],
+        "vvvvvv_text": ["*.ttf", "*.png"],
     }
 )
