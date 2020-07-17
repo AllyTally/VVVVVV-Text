@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="vvvvvv_text",
-    version="1.0.3",
+    version="1.0.4",
     author="Ally Tilde",
     author_email="alexiatilde@gmail.com",
     description="A GUI interface for creating VVVVVV textboxes",
@@ -17,5 +17,9 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
-    ]
+    ],
+    include_package_data=True,
+    package_data={
+        "vvvvvv_text": ["*.ttf", "*.png"],
+    }
 )
