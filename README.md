@@ -20,6 +20,8 @@ First, clone/download the repo, using the big green button above. Then run `pip3
 
 To run the program, run `python3 vvvvvv-text.py` in your terminal. Make sure you run this in the folder containing `vvvvvv-text.py`. Feel free to create a batch/shell script that runs this command so it's easier to open.
 
+On Windows, it's possible to double-click the `vvvvvv-text.py` file to run the program in most cases.
+
 If you are unable to use `pip3` or `python3`, try `pip` and `python`.
 
 ## Screenshot
