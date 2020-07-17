@@ -7,7 +7,6 @@ import sys
 import textwrap
 import math
 
-
 colors = [
     (164,164,255),
     (255,60,60),
@@ -382,8 +381,12 @@ class PositionWindow(QDialog):
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Return:
             self.close()
-    
-if __name__ == "__main__":
+
+
+def run():
     App = QApplication(sys.argv)
     window = Window()
     sys.exit(App.exec_())
+
+if __name__ == '__main__':
+    run()
