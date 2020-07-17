@@ -11,14 +11,14 @@ If you have `git` installed, you can follow these.
 
 To install, type `pip3 install git+https://github.com/AllyTally/VVVVVV-Text#egg=vvvvvv-text` in your terminal.
 
-To run the program, use `python3 -m vvvvvv-text` in your terminal.
+To run the program, use `python3 -m vvvvvv-text` in your terminal. Feel free to create a batch/shell script that runs this command so it's easier to open.
 
 If you are unable to use `pip3` or `python3`, try `pip` and `python`.
 
 ### Without git:
 First, clone/download the repo, using the big green button above. Then run `pip3 install -r requirements.txt` in your terminal.
 
-To run the program, run `python3 vvvvvv-text.py` in your terminal. Make sure you run this in the folder containing `vvvvvv-text.py`.
+To run the program, run `python3 vvvvvv-text.py` in your terminal. Make sure you run this in the folder containing `vvvvvv-text.py`. Feel free to create a batch/shell script that runs this command so it's easier to open.
 
 If you are unable to use `pip3` or `python3`, try `pip` and `python`.
 
