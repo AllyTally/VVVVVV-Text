@@ -43,7 +43,7 @@ def PaintTextbox(painter,x,y,text,color):
     painter.setFont(font_spacestation)
     lines = []
     for line in text.split("\n"):
-        lines.append("\n".join(textwrap.wrap(line, width=36)))
+        lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=True)))
     text = "\n".join(lines)
         
     text_width = 0
@@ -273,7 +273,7 @@ class Window(QWidget):
     
         lines = []
         for line in self.textbox_text.split("\n"):
-            lines.append("\n".join(textwrap.wrap(line, width=36)))
+            lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=False)))
         text = "\n".join(lines)
     
     
