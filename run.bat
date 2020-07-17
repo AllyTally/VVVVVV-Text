@@ -1,1 +1,1 @@
-python vvvvvv_text
+@python -m vvvvvv_text
