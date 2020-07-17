@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt, QRect, QPoint
 import sys
 import textwrap
 import math
+import os
 
 colors = [
     (164,164,255),
@@ -118,7 +119,7 @@ class Window(QWidget):
 
         self.title = "Textbox Generator"
 
-        QFontDatabase.addApplicationFont("space_station.ttf")
+        QFontDatabase.addApplicationFont(os.path.dirname(__file__) + "/space_station.ttf")
         
         self.textbox_position_x = 20
         self.textbox_position_y = 20
@@ -319,7 +320,7 @@ class PositionWindow(QDialog):
         self.offset_y = 0
         self.mouse_down = False
 
-        QFontDatabase.addApplicationFont("space_station.ttf")
+        QFontDatabase.addApplicationFont(os.path.dirname(__file__) + "/space_station.ttf")
         self.InitWindow()
 
     def InitWindow(self):
