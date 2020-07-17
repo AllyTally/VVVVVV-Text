@@ -220,11 +220,14 @@ class Window(QWidget):
     def edit_position(self):
         self.window = PositionWindow(self)
         self.window.setWindowModality(Qt.ApplicationModal)
-        self.window.exec_()
 
-        self.textbox_position_x = self.window.textbox_x
-        self.textbox_position_y = self.window.textbox_y
-        self.update_script()
+        def update():
+            self.textbox_position_x = self.window.textbox_x
+            self.textbox_position_y = self.window.textbox_y
+            self.update_script()
+
+        self.window.show()
+        self.window.destroyed.connect(update)
 
     def save_image(self):
     
@@ -302,7 +305,7 @@ class Window(QWidget):
         self.widget_text_output.setPlainText(script)
 
 
-class PositionWindow(QDialog):
+class PositionWindow(QWidget):
     def __init__(self,parent):
         super().__init__()
         self.parent = parent
@@ -324,6 +327,7 @@ class PositionWindow(QDialog):
         self.InitWindow()
 
     def InitWindow(self):
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         self.setWindowIcon(QtGui.QIcon(os.path.dirname(__file__) + "/icon.png"))
         self.setWindowTitle(self.title)
 
@@ -351,6 +355,8 @@ class PositionWindow(QDialog):
 
     def mouseMoveEvent(self, e):
         if self.mouse_down:
+            e.accept()
+
             self.textbox_x = self.offset_x + e.x()
             self.textbox_y = self.offset_y + e.y()
             self.textbox_x = math.floor(self.textbox_x / 2) * 2
@@ -372,15 +378,18 @@ class PositionWindow(QDialog):
             self.update()
         
     def mousePressEvent(self, e):
+        e.accept()
         self.offset_x = self.textbox_x - e.x()
         self.offset_y = self.textbox_y - e.y()
         self.mouse_down = True
 
     def mouseReleaseEvent(self, e):
+        e.accept()
         self.mouse_down = False
     
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Return:
+            e.accept()
             self.close()
 
 
