@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QGridLayout, QPushButton, QLabel, QPlainTextEdit, QSizePolicy, QComboBox, QStackedLayout, QDialog, QFileDialog
 from PyQt5.QtGui import QPainter, QBrush, QPen, QFont, QColor, QFontDatabase, QImage, QClipboard
