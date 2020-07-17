@@ -13,7 +13,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/AllyTally/VVVVVV-Text",
     packages=['vvvvvv_text'],
-    scripts=['vvvvvv_text'],
     install_requires=['PyQt5'],
     classifiers=[
         "Programming Language :: Python :: 3",
