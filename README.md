@@ -24,5 +24,10 @@ On Windows, it's possible to double-click the `vvvvvv-text.py` file to run the p
 
 If you are unable to use `pip3` or `python3`, try `pip` and `python`.
 
+## Updating
+When the program gets an update, run `pip3 install --upgrade git+https://github.com/AllyTally/VVVVVV-Text#egg=vvvvvv-text` to update it.
+
+If you are unable to use `pip3`, try `pip`.
+
 ## Screenshot
 ![Screenshot](https://o.lol-sa.me/ALie7Ct.png)
