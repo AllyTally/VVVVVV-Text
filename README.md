@@ -4,7 +4,7 @@ This program is a GUI interface which generates internal scripting VVVVVV textbo
 ## Installation
 Make sure you have `Python 3` installed.
 
-This program requires PyQt5 to be installed. Both methods of installation listed below install it automatically.
+This program requires `PyQt5` to be installed. Both methods of installation listed below install it automatically.
 
 ### Through git:
 If you have `git` installed, you can follow these.
@@ -18,7 +18,7 @@ If you are unable to use `pip3` or `python3`, try `pip` and `python`.
 ### Without git:
 First, clone/download the repo, using the big green button above. Then run `pip3 install -r requirements.txt` in your terminal.
 
-To run the program, run `python3 vvvvvv-text.py` in your terminal.
+To run the program, run `python3 vvvvvv-text.py` in your terminal. Make sure you run this in the folder containing `vvvvvv-text.py`.
 
 If you are unable to use `pip3` or `python3`, try `pip` and `python`.
 
