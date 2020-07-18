@@ -28,4 +28,4 @@ When the program gets an update, run `pip3 install --upgrade git+https://github.
 If you are unable to use `pip3`, try `pip`.
 
 ## Screenshot
-![Screenshot](https://o.lol-sa.me/ALie7Ct.png)
+![Screenshot](https://o.lol-sa.me/5cLxdYF.png)
