@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QGridLayout, QPushButton, QLabel, QPlainTextEdit, QSizePolicy, QComboBox, QStackedLayout, QDialog, QFileDialog
+from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QGridLayout, QPushButton, QLabel, QPlainTextEdit, QSizePolicy, QComboBox, QStackedLayout, QDialog, QFileDialog, QSpinBox
 from PyQt5.QtGui import QPainter, QBrush, QPen, QFont, QColor, QFontDatabase, QImage, QClipboard, QPalette
 from PyQt5.QtCore import Qt, QRect, QPoint, QByteArray
 import sys
@@ -159,6 +159,8 @@ class Window(QWidget):
         self.widget_position_above = QComboBox()
         self.widget_position_above.addItems(crewmate_positions)
         self.widget_position_edit = QPushButton("Place textbox")
+        self.widget_position_x = QSpinBox()
+        self.widget_position_y = QSpinBox()
 
         self.widget_squeak_label = QLabel('Squeak:')
         self.widget_squeak = QComboBox()
@@ -178,17 +180,19 @@ class Window(QWidget):
         self.layout.addWidget(self.widget_save_image,1,0)
         self.layout.addWidget(self.widget_copy_image,1,1)
         self.layout.addWidget(self.widget_text_input_label,2,0)
-        self.layout.addWidget(self.widget_text_input,3,0,1,0)
+        self.layout.addWidget(self.widget_text_input,3,0,1,6)
         self.layout.addWidget(self.widget_color_label,4,0)
-        self.layout.addWidget(self.widget_color,4,1)
+        self.layout.addWidget(self.widget_color,4,1,1,5)
         self.layout.addWidget(self.widget_position_label,5,0)
         self.layout.addWidget(self.widget_position,5,1)
         self.layout.addWidget(self.widget_position_above,5,2)
         self.layout.addWidget(self.widget_position_edit,5,3)
+        self.layout.addWidget(self.widget_position_x,5,4)
+        self.layout.addWidget(self.widget_position_y,5,5)
         self.layout.addWidget(self.widget_squeak_label,6,0)
-        self.layout.addWidget(self.widget_squeak,6,1)
+        self.layout.addWidget(self.widget_squeak,6,1,1,5)
         self.layout.addWidget(self.widget_text_output_label,7,0)
-        self.layout.addWidget(self.widget_text_output,7,1)
+        self.layout.addWidget(self.widget_text_output,7,1,1,5)
         
         self.widget_position_above.setEnabled(False)
         self.widget_position_edit.setEnabled(False)
@@ -197,6 +201,14 @@ class Window(QWidget):
         self.widget_position_edit.clicked.connect(self.edit_position)
         self.widget_position.currentIndexChanged.connect(self.change_buttons)
         self.widget_position_above.currentIndexChanged.connect(self.change_position_above)
+        self.widget_position_x.valueChanged.connect(self.change_position_x)
+        self.widget_position_y.valueChanged.connect(self.change_position_y)
+        self.widget_position_x.setRange(0,320)
+        self.widget_position_y.setRange(0,240)
+        self.widget_position_x.setValue(10)
+        self.widget_position_y.setValue(10)
+        self.widget_position_x.setEnabled(False)
+        self.widget_position_y.setEnabled(False)
         
         self.update_script()
         
@@ -225,6 +237,8 @@ class Window(QWidget):
         def update():
             self.textbox_position_x = self.window.textbox_x
             self.textbox_position_y = self.window.textbox_y
+            self.widget_position_x.setValue(math.floor(self.textbox_position_x / 2))
+            self.widget_position_y.setValue(math.floor(self.textbox_position_y / 2))
             self.update_script()
 
         self.window.show()
@@ -263,14 +277,28 @@ class Window(QWidget):
         self.textbox_position_type = index
         self.widget_position_above.setEnabled(False)
         self.widget_position_edit.setEnabled(False)
+        self.widget_position_x.setEnabled(False)
+        self.widget_position_y.setEnabled(False)
         if index in [1, 2, 5]:
             self.widget_position_edit.setEnabled(True)
         if index in [3, 4]:
             self.widget_position_above.setEnabled(True)
+        if index in [1, 5]:
+            self.widget_position_y.setEnabled(True)
+        if index in [2, 5]:
+            self.widget_position_x.setEnabled(True)
         self.update_script()
 
     def change_position_above(self, index):
         self.textbox_position_crewmate = index
+        self.update_script()
+    
+    def change_position_x(self, index):
+        self.textbox_position_x = math.floor(index * 2)
+        self.update_script()
+
+    def change_position_y(self, index):
+        self.textbox_position_y = math.floor(index * 2)
         self.update_script()
     
     def update_script(self):
@@ -336,6 +364,8 @@ class PositionWindow(QWidget):
 
         self.resize(640,480)
         
+        self.position_once = False
+        
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
         self.setFocus()
@@ -346,6 +376,10 @@ class PositionWindow(QWidget):
         text_width, text_height = PaintTextbox(painter,self.textbox_x,self.textbox_y,self.textbox_text,colors[self.textbox_color])
         self.textbox_width = text_width + 32
         self.textbox_height = text_height + 32
+        
+        if not self.position_once:
+            self.position_once = True
+            self.adjustPosition()
         
         if self.background_image:
             palette = QPalette()
@@ -371,21 +405,24 @@ class PositionWindow(QWidget):
             self.textbox_x = math.floor(self.textbox_x / 2) * 2
             self.textbox_y = math.floor(self.textbox_y / 2) * 2
 
-            if self.textbox_x < 20:
-                self.textbox_x = 20
-            if self.textbox_y < 20:
-                self.textbox_y = 20
-            if self.textbox_x + self.textbox_width >= 620:
-                self.textbox_x = 620 - self.textbox_width
-            if self.textbox_y + self.textbox_height >= 460:
-                self.textbox_y = 460 - self.textbox_height
-            
-            if self.textbox_position_type == 1:
-                self.textbox_x = 320 - self.textbox_width / 2
-            if self.textbox_position_type == 2:
-                self.textbox_y = 240 - self.textbox_height / 2
+            self.adjustPosition()
             self.update()
         
+    def adjustPosition(self):
+        if self.textbox_x < 20:
+            self.textbox_x = 20
+        if self.textbox_y < 20:
+            self.textbox_y = 20
+        if self.textbox_x + self.textbox_width >= 620:
+            self.textbox_x = 620 - self.textbox_width
+        if self.textbox_y + self.textbox_height >= 460:
+            self.textbox_y = 460 - self.textbox_height
+        
+        if self.textbox_position_type == 1:
+            self.textbox_x = 320 - self.textbox_width / 2
+        if self.textbox_position_type == 2:
+            self.textbox_y = 240 - self.textbox_height / 2
+
     def mousePressEvent(self, e):
         e.accept()
         self.offset_x = self.textbox_x - e.x()

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="vvvvvv_text",
-    version="1.0.9",
+    version="1.0.10",
     author="Ally Tilde",
     author_email="alexiatilde@gmail.com",
     description="A GUI interface for creating VVVVVV textboxes",
