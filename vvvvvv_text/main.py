@@ -44,7 +44,7 @@ def PaintTextbox(painter,x,y,text,color):
     painter.setFont(font_spacestation)
     lines = []
     for line in text.split("\n"):
-        lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=True)))
+        lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=False)))
     text = "\n".join(lines)
         
     text_width = 0
