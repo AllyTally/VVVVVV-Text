@@ -286,7 +286,7 @@ class Window(QWidget):
             script += "squeak(" + squeaks[self.textbox_squeak].lower() + ")\n"
         script += "text("
         script += GetRealColorName(self.textbox_color).lower() + ","
-        script += str(self.textbox_position_x / 2) + "," + str(self.textbox_position_y / 2) + "," + str(len(text.split("\n"))) + ")\n"
+        script += str(math.floor(self.textbox_position_x / 2)) + "," + str(math.floor(self.textbox_position_y / 2)) + "," + str(len(text.split("\n"))) + ")\n"
         script += text + "\n"
         if self.textbox_color > 6:
             script += "createcrewman(-20,0,gray,0,faceleft)\n"
