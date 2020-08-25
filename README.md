@@ -23,9 +23,14 @@ To run the program, run `python3 -m vvvvvv_text.py` in your terminal. Feel free 
 If you are unable to use `pip3` or `python3`, try `pip` and `python`.
 
 ## Updating
+
+### Through git:
 When the program gets an update, run `pip3 install --upgrade git+https://github.com/AllyTally/VVVVVV-Text.git#egg=vvvvvv_text` to update it.
 
 If you are unable to use `pip3`, try `pip`.
+
+### Without git:
+If you installed the program without using `git`, simply just redownload the program to update.
 
 ## Screenshot
 ![Screenshot](https://o.lol-sa.me/5cLxdYF.png)
