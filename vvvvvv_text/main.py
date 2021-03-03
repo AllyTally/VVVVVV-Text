@@ -10,23 +10,27 @@ import os
 import urllib.request
 
 colors = [
-    (164,164,255),
-    (255,60,60),
-    (144,255,144),
-    (95,95,255),
-    (255,134,255),
-    (229,229,120),
-    (174,174,174),
+    (164,164,255), # Cyan
+    (255,60,60),   # Rad
+    (144,255,144), # Green
+    (95,95,255),   # Blue
+    (255,134,255), # Purple
+    (229,229,120), # Yellow
+    (174,174,174), # Gray
+    (255,130,20),  # Orange
+    (244,244,244), # White
     (19,174,174),
     (19,60,60),
     (19,255,144),
     (19,255,134),
     (19,95,255),
     (19,134,255),
-    (19,164,255)
+    (19,164,255),
+    (19,130,20),   # Dark Green
+    (19,244,244)   # Light Aqua
 ]
 
-color_names = ["Cyan", "Red", "Green", "Blue", "Purple", "Yellow", "Gray", "Teal", "Dark Teal", "Spring Green", "Darker Spring Green", "Bright Blue", "Brighter Blue", "Aqua"]
+color_names = ["Cyan", "Red", "Green", "Blue", "Purple", "Yellow", "Gray", "Orange", "White", "Teal", "Dark Teal", "Spring Green", "Darker Spring Green", "Bright Blue", "Brighter Blue", "Aqua", "Dark Green", "Light Aqua"]
 
 squeaks = ["None", "Cyan", "Red", "Green", "Blue", "Purple", "Yellow", "Terminal"]
 
@@ -37,7 +41,7 @@ font_spacestation.setStyleStrategy(QFont.NoAntialias)
 
 
 def GetRealColorName(index):
-    translation = [0,1,2,3,4,5,6,6,1,2,5,3,4,0]
+    translation = [0,1,2,3,4,5,6,6,1,2,5,3,4,0,7,8,7,8]
     return color_names[translation[index]]
 
 def PaintTextbox(painter,x,y,text,color):
@@ -316,7 +320,7 @@ class Window(QWidget):
         script += GetRealColorName(self.textbox_color).lower() + ","
         script += str(math.floor(self.textbox_position_x / 2)) + "," + str(math.floor(self.textbox_position_y / 2)) + "," + str(len(text.split("\n"))) + ")\n"
         script += text + "\n"
-        if self.textbox_color > 6:
+        if self.textbox_color > 8:
             script += "createcrewman(-20,0,gray,0,faceleft)\n"
         if self.textbox_position_type != 5:
             script += "position("
