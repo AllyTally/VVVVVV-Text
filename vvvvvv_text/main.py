@@ -41,14 +41,14 @@ font_spacestation.setStyleStrategy(QFont.NoAntialias)
 
 
 def GetRealColorName(index):
-    translation = [0,1,2,3,4,5,6,6,1,2,5,3,4,0,7,8,7,8]
+    translation = [0,1,2,3,4,5,6,7,8,6,1,2,5,3,4,0,7,8,7,8]
     return color_names[translation[index]]
 
 def PaintTextbox(painter,x,y,text,color):
     painter.setFont(font_spacestation)
     lines = []
     for line in text.split("\n"):
-        lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=False)))
+        lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=False)).replace(" \n", "\n").replace("\n ", "\n"))
     text = "\n".join(lines)
         
     text_width = 0
@@ -162,7 +162,7 @@ class Window(QWidget):
         self.widget_position.addItems(["Centered", "Horizontally centered", "Vertically centered", "Above...", "Below...", "Absolute"])
         self.widget_position_above = QComboBox()
         self.widget_position_above.addItems(crewmate_positions)
-        self.widget_position_edit = QPushButton("Place textbox")
+        self.widget_position_edit = QPushButton("View/Place")
         self.widget_position_x = QSpinBox()
         self.widget_position_y = QSpinBox()
 
@@ -199,7 +199,6 @@ class Window(QWidget):
         self.layout.addWidget(self.widget_text_output,7,1,1,5)
         
         self.widget_position_above.setEnabled(False)
-        self.widget_position_edit.setEnabled(False)
         self.widget_save_image.clicked.connect(self.save_image)
         self.widget_copy_image.clicked.connect(self.copy_image)
         self.widget_position_edit.clicked.connect(self.edit_position)
@@ -283,7 +282,7 @@ class Window(QWidget):
         self.widget_position_edit.setEnabled(False)
         self.widget_position_x.setEnabled(False)
         self.widget_position_y.setEnabled(False)
-        if index in [1, 2, 5]:
+        if index in [0, 1, 2, 5]:
             self.widget_position_edit.setEnabled(True)
         if index in [3, 4]:
             self.widget_position_above.setEnabled(True)
@@ -309,7 +308,7 @@ class Window(QWidget):
     
         lines = []
         for line in self.textbox_text.split("\n"):
-            lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=False)))
+            lines.append("\n".join(textwrap.wrap(line, width=36, drop_whitespace=False)).replace(" \n", "\n").replace("\n ", "\n"))
         text = "\n".join(lines)
     
     
@@ -421,7 +420,10 @@ class PositionWindow(QWidget):
             self.textbox_x = 620 - self.textbox_width
         if self.textbox_y + self.textbox_height >= 460:
             self.textbox_y = 460 - self.textbox_height
-        
+
+        if self.textbox_position_type == 0:
+            self.textbox_x = 320 - self.textbox_width / 2
+            self.textbox_y = 240 - self.textbox_height / 2        
         if self.textbox_position_type == 1:
             self.textbox_x = 320 - self.textbox_width / 2
         if self.textbox_position_type == 2:
